@@ -6,3 +6,9 @@ function parseUrlParams($url) {
     parse_str($queryString, $params);
     return $params;
 }
+
+function createDirIfNotExist($dirname) {
+    if (!file_exists($dirname) || !is_dir($dirname)) {
+        mkdir($dirname, 0777, true);
+    }
+}
