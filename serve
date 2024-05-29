@@ -1,0 +1,27 @@
+<?php
+
+use App\Exception\ZanExceptionHandler;
+use App\Service\DiscordService;
+use React\EventLoop\Loop;
+
+require "vendor/autoload.php";
+require "helpers/functions.php";
+
+
+set_exception_handler([ZanExceptionHandler::class, "handle"]);
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+$dotenv->required("BOT_TOKEN"); 
+$dotenv->required("GUILD_ID");
+$dotenv->required("CHANNEL_ID");
+
+
+
+$loop = Loop::get();
+$discordService = new DiscordService($loop);
+global $discordService;
+
+
+$httpServer = new \App\Http\HttpServer($loop);
+$httpServer->setRouterFromFile("route/web.php");
+$httpServer->run("127.0.0.1:2000");
